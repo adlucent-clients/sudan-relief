@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
+import Image from "next/image";
 
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -128,7 +128,7 @@ type DonationMethod = {
   id: string;
   name: string;
   badge: string;
-  qrValue: string;
+  qrImage: string;
   primaryLabel: string;
   primaryValue: string;
   secondaryLabel: string;
@@ -144,7 +144,7 @@ const donationMethods: DonationMethod[] = [
     id: "zelle",
     name: "Zelle",
     badge: "Via Bank",
-    qrValue: "tel:+17048080245",
+    qrImage: "/qr-zelle.png",
     primaryLabel: "Phone Number",
     primaryValue: "+1 (704) 808-0245",
     secondaryLabel: "Recipient",
@@ -167,7 +167,7 @@ const donationMethods: DonationMethod[] = [
     id: "cashapp",
     name: "Cash App",
     badge: "Via App",
-    qrValue: "https://cash.app/$pfsulay1",
+    qrImage: "/qr-cashapp.jpeg",
     primaryLabel: "Cashtag",
     primaryValue: "$pfsulay1",
     secondaryLabel: "Platform",
@@ -529,13 +529,12 @@ function DonationCard({ method, index }: { method: DonationMethod; index: number
               lineHeight: 0,
               flexShrink: 0,
             }}>
-              <QRCodeSVG
-                value={method.qrValue}
-                size={100}
-                bgColor="#F7F0E3"
-                fgColor="#0C0804"
-                level="H"
-                style={{ display: "block" }}
+              <Image
+                src={method.qrImage}
+                alt={`${method.name} QR code`}
+                width={110}
+                height={110}
+                style={{ display: "block", borderRadius: "1px" }}
               />
             </div>
             <div>
