@@ -38,9 +38,56 @@ function RevealSection({ children, delay = 0 }: { children: React.ReactNode; del
   );
 }
 
+const FactIcon = ({ type, color }: { type: string; color: string }) => {
+  const s = { width: 28, height: 28, display: "block" as const };
+  if (type === "people") return (
+    <svg {...s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+  );
+  if (type === "displaced") return (
+    <svg {...s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+      <line x1="3" y1="9" x2="1" y2="11"/>
+      <line x1="21" y1="9" x2="23" y2="11"/>
+    </svg>
+  );
+  if (type === "famine") return (
+    <svg {...s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2a10 10 0 1 0 10 10"/>
+      <path d="M12 6v6l4 2"/>
+      <line x1="18" y1="2" x2="18" y2="8"/>
+      <line x1="15" y1="5" x2="21" y2="5"/>
+    </svg>
+  );
+  if (type === "health") return (
+    <svg {...s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+    </svg>
+  );
+  if (type === "education") return (
+    <svg {...s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+  );
+  if (type === "conflict") return (
+    <svg {...s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+  );
+  return null;
+};
+
 const facts = [
   {
-    icon: "💔",
+    iconType: "people",
     title: "25 Million",
     subtitle: "people need humanitarian assistance",
     detail:
@@ -48,7 +95,7 @@ const facts = [
     color: "var(--sudan-red)",
   },
   {
-    icon: "🏚️",
+    iconType: "displaced",
     title: "11 Million",
     subtitle: "displaced from their homes",
     detail:
@@ -56,7 +103,7 @@ const facts = [
     color: "var(--terracotta)",
   },
   {
-    icon: "🍽️",
+    iconType: "famine",
     title: "Famine Declared",
     subtitle: "in multiple regions",
     detail:
@@ -64,7 +111,7 @@ const facts = [
     color: "var(--sand)",
   },
   {
-    icon: "🏥",
+    iconType: "health",
     title: "Healthcare Collapsed",
     subtitle: "across conflict zones",
     detail:
@@ -72,7 +119,7 @@ const facts = [
     color: "var(--sudan-green)",
   },
   {
-    icon: "📚",
+    iconType: "education",
     title: "19 Million",
     subtitle: "children out of school",
     detail:
@@ -80,7 +127,7 @@ const facts = [
     color: "var(--sand)",
   },
   {
-    icon: "⚠️",
+    iconType: "conflict",
     title: "Ongoing Conflict",
     subtitle: "since April 2023",
     detail:
@@ -95,7 +142,7 @@ export default function CrisisSection() {
       id="crisis"
       style={{
         background: "linear-gradient(180deg, #0C0804 0%, #120A04 60%, #0C0804 100%)",
-        padding: "120px 0",
+        padding: "clamp(80px, 10vw, 120px) 0",
         position: "relative",
         overflow: "hidden",
       }}
@@ -129,7 +176,7 @@ export default function CrisisSection() {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "0 32px",
+          padding: "0 clamp(20px, 5vw, 32px)",
         }}
       >
         {/* Section header */}
@@ -274,7 +321,9 @@ export default function CrisisSection() {
                   (e.currentTarget as HTMLElement).style.borderBottomColor = "transparent";
                 }}
               >
-                <div style={{ fontSize: "28px", marginBottom: "16px" }}>{fact.icon}</div>
+                <div style={{ marginBottom: "20px", opacity: 0.85 }}>
+                  <FactIcon type={fact.iconType} color={fact.color} />
+                </div>
                 <div
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",

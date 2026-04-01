@@ -93,16 +93,38 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+const ZelleLogo = () => (
+  <span style={{
+    fontFamily: "'DM Sans', system-ui, sans-serif",
+    fontWeight: 700,
+    fontSize: "20px",
+    letterSpacing: "-0.02em",
+    color: "#6D1ED4",
+    lineHeight: 1,
+  }}>
+    Zelle<span style={{ color: "#4A0E9E", fontSize: "22px", marginLeft: "1px" }}>®</span>
+  </span>
+);
+
+const CashAppLogo = () => (
+  <span style={{
+    fontFamily: "'DM Sans', system-ui, sans-serif",
+    fontWeight: 700,
+    fontSize: "18px",
+    letterSpacing: "-0.01em",
+    color: "#00C244",
+    lineHeight: 1,
+  }}>
+    Cash App
+  </span>
+);
+
 const donationMethods = [
   {
     id: "zelle",
     name: "Zelle",
-    logo: (
-      <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "80px", height: "28px" }}>
-        <text x="0" y="30" fontFamily="Arial Black, sans-serif" fontSize="28" fontWeight="900" fill="#6D1ED4">Zelle</text>
-      </svg>
-    ),
-    accentColor: "#6D1ED4",
+    logo: <ZelleLogo />,
+    accentColor: "#7B2FE0",
     accentBg: "rgba(109,30,212,0.08)",
     accentBorder: "rgba(109,30,212,0.3)",
     qrValue: "tel:+17048080245",
@@ -122,14 +144,10 @@ const donationMethods = [
   {
     id: "cashapp",
     name: "Cash App",
-    logo: (
-      <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "90px", height: "28px" }}>
-        <text x="0" y="30" fontFamily="Arial Black, sans-serif" fontSize="24" fontWeight="900" fill="#00D64F">Cash App</text>
-      </svg>
-    ),
-    accentColor: "#00D64F",
-    accentBg: "rgba(0,214,79,0.08)",
-    accentBorder: "rgba(0,214,79,0.3)",
+    logo: <CashAppLogo />,
+    accentColor: "#00C244",
+    accentBg: "rgba(0,194,68,0.08)",
+    accentBorder: "rgba(0,194,68,0.3)",
     qrValue: "https://cash.app/$pfsulay1",
     primaryLabel: "Cashtag",
     primaryValue: "$pfsulay1",
@@ -142,7 +160,7 @@ const donationMethods = [
       "Enter any amount and send",
     ],
     badge: "Instant",
-    badgeColor: "#00D64F",
+    badgeColor: "#00C244",
   },
 ];
 
@@ -152,7 +170,7 @@ export default function DonateSection() {
       id="donate"
       style={{
         background: "linear-gradient(180deg, #0C0804 0%, #0F0B06 50%, #0C0804 100%)",
-        padding: "120px 0",
+        padding: "clamp(80px, 10vw, 120px) 0",
         position: "relative",
         overflow: "hidden",
       }}
@@ -181,7 +199,7 @@ export default function DonateSection() {
         pointerEvents: "none",
       }} />
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 clamp(20px, 5vw, 32px)" }}>
         {/* Section header */}
         <RevealSection>
           <div style={{ marginBottom: "72px", textAlign: "center" }}>
@@ -232,7 +250,7 @@ export default function DonateSection() {
         {/* Donation cards */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(420px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(420px, 100%), 1fr))",
           gap: "24px",
           marginBottom: "60px",
         }}>
@@ -282,15 +300,15 @@ export default function DonateSection() {
                 {/* Header */}
                 <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "36px" }}>
                   <div style={{
-                    width: "52px",
-                    height: "52px",
-                    borderRadius: "12px",
+                    height: "44px",
+                    borderRadius: "8px",
                     background: method.accentBg,
                     border: `1px solid ${method.accentBorder}`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,
+                    padding: "0 16px",
                   }}>
                     {method.logo}
                   </div>
@@ -505,7 +523,7 @@ export default function DonateSection() {
                       width: "100%",
                     }}
                     onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = `rgba(0,214,79,0.18)`;
+                      (e.currentTarget as HTMLElement).style.background = `rgba(0,194,68,0.18)`;
                     }}
                     onMouseLeave={(e) => {
                       (e.currentTarget as HTMLElement).style.background = method.accentBg;

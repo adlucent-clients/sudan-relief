@@ -5,7 +5,7 @@ export default function Footer() {
       style={{
         background: "#080503",
         borderTop: "1px solid rgba(212,167,86,0.1)",
-        padding: "52px 32px 36px",
+        padding: "52px clamp(20px, 5vw, 32px) 36px",
       }}
     >
       <div
@@ -18,11 +18,10 @@ export default function Footer() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr auto",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
             gap: "40px",
             alignItems: "start",
             marginBottom: "48px",
-            flexWrap: "wrap",
           }}
         >
           {/* Brand */}
