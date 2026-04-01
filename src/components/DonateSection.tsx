@@ -148,9 +148,9 @@ const donationMethods = [
     accentColor: "#00C244",
     accentBg: "rgba(0,194,68,0.08)",
     accentBorder: "rgba(0,194,68,0.3)",
-    qrValue: "https://cash.app/$pfsulay1",
+    qrValue: "https://cash.app/$5pfsulay1",
     primaryLabel: "Cashtag",
-    primaryValue: "$pfsulay1",
+    primaryValue: "$5pfsulay1",
     secondaryLabel: "Platform",
     secondaryValue: "Cash App",
     instructions: [
