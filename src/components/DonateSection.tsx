@@ -56,9 +56,9 @@ function CopyButton({ text }: { text: string }) {
     <button
       onClick={copy}
       style={{
-        background: copied ? "rgba(0,122,61,0.15)" : "rgba(212,167,86,0.1)",
-        border: `1px solid ${copied ? "rgba(0,122,61,0.5)" : "rgba(212,167,86,0.25)"}`,
-        color: copied ? "var(--sudan-green)" : "var(--sand)",
+        background: copied ? "rgba(212,167,86,0.18)" : "rgba(212,167,86,0.07)",
+        border: `1px solid ${copied ? "rgba(212,167,86,0.5)" : "rgba(212,167,86,0.18)"}`,
+        color: copied ? "var(--sand-light)" : "var(--sand)",
         fontFamily: "'DM Sans', sans-serif",
         fontSize: "11px",
         fontWeight: 500,
@@ -75,16 +75,16 @@ function CopyButton({ text }: { text: string }) {
     >
       {copied ? (
         <>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
           </svg>
-          Copied!
+          Copied
         </>
       ) : (
         <>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
           </svg>
           Copy
         </>
@@ -93,18 +93,57 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-const donationMethods = [
+// Editorial L-bracket corner accent
+function CornerAccent({ position }: { position: "tl" | "tr" | "bl" | "br" }) {
+  const s = 18;
+  const paths: Record<string, string> = {
+    tl: `M ${s} 0 L 0 0 L 0 ${s}`,
+    tr: `M 0 0 L ${s} 0 L ${s} ${s}`,
+    bl: `M 0 0 L 0 ${s} L ${s} ${s}`,
+    br: `M 0 ${s} L ${s} ${s} L ${s} 0`,
+  };
+  const posStyle: React.CSSProperties = {
+    position: "absolute",
+    pointerEvents: "none",
+    ...(position.includes("t") ? { top: "16px" } : { bottom: "16px" }),
+    ...(position.includes("l") ? { left: "16px" } : { right: "16px" }),
+  };
+  return (
+    <svg width={s + 1} height={s + 1} style={posStyle} viewBox={`0 0 ${s} ${s}`}>
+      <path d={paths[position]} stroke="rgba(212,167,86,0.28)" strokeWidth="1" fill="none" />
+    </svg>
+  );
+}
+
+// Small diamond ornament
+function Diamond({ opacity = 0.6 }: { opacity?: number }) {
+  return (
+    <svg width="6" height="6" viewBox="0 0 6 6" style={{ flexShrink: 0 }}>
+      <rect x="0" y="0" width="6" height="6" transform="rotate(45 3 3)" fill={`rgba(212,167,86,${opacity})`} />
+    </svg>
+  );
+}
+
+type DonationMethod = {
+  id: string;
+  name: string;
+  badge: string;
+  qrValue: string;
+  primaryLabel: string;
+  primaryValue: string;
+  secondaryLabel: string;
+  secondaryValue: string;
+  instructions: string[];
+  icon: React.ReactNode;
+  link?: string;
+  note?: string;
+};
+
+const donationMethods: DonationMethod[] = [
   {
     id: "zelle",
     name: "Zelle",
-    logo: (
-      <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "80px", height: "28px" }}>
-        <text x="0" y="30" fontFamily="Arial Black, sans-serif" fontSize="28" fontWeight="900" fill="#6D1ED4">Zelle</text>
-      </svg>
-    ),
-    accentColor: "#6D1ED4",
-    accentBg: "rgba(109,30,212,0.08)",
-    accentBorder: "rgba(109,30,212,0.3)",
+    badge: "Via Bank",
     qrValue: "tel:+17048080245",
     primaryLabel: "Phone Number",
     primaryValue: "+1 (704) 808-0245",
@@ -112,39 +151,420 @@ const donationMethods = [
     secondaryValue: "Jawad Saymeh",
     instructions: [
       "Open your bank's mobile app",
-      "Find Zelle (most major banks)",
+      "Navigate to Zelle transfers",
       "Send to the phone number below",
       "Include 'Sudan Relief' in memo",
     ],
-    badge: "Most Banks",
-    badgeColor: "#6D1ED4",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+        <line x1="12" y1="18" x2="12.01" y2="18" />
+      </svg>
+    ),
+    note: "Available in most major US banks — Chase, Bank of America, Wells Fargo, and more",
   },
   {
     id: "cashapp",
     name: "Cash App",
-    logo: (
-      <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "90px", height: "28px" }}>
-        <text x="0" y="30" fontFamily="Arial Black, sans-serif" fontSize="24" fontWeight="900" fill="#00D64F">Cash App</text>
-      </svg>
-    ),
-    accentColor: "#00D64F",
-    accentBg: "rgba(0,214,79,0.08)",
-    accentBorder: "rgba(0,214,79,0.3)",
+    badge: "Via App",
     qrValue: "https://cash.app/$pfsulay1",
     primaryLabel: "Cashtag",
     primaryValue: "$pfsulay1",
     secondaryLabel: "Platform",
     secondaryValue: "Cash App",
     instructions: [
-      "Download the Cash App",
-      "Tap the '$' send button",
+      "Download or open Cash App",
+      "Tap the $ send button",
       "Search for the cashtag below",
       "Enter any amount and send",
     ],
-    badge: "Instant",
-    badgeColor: "#00D64F",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="12" y1="1" x2="12" y2="23" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </svg>
+    ),
+    link: "https://cash.app/$pfsulay1",
   },
 ];
+
+function DonationCard({ method, index }: { method: DonationMethod; index: number }) {
+  const [showQR, setShowQR] = useState(false);
+
+  return (
+    <RevealSection delay={index * 130}>
+      <div
+        className="card-lift"
+        style={{
+          background: "linear-gradient(160deg, rgba(20,14,8,0.98) 0%, rgba(13,9,4,0.99) 100%)",
+          border: "1px solid rgba(212,167,86,0.14)",
+          borderRadius: "4px",
+          padding: "44px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Editorial corner brackets */}
+        <CornerAccent position="tl" />
+        <CornerAccent position="tr" />
+        <CornerAccent position="bl" />
+        <CornerAccent position="br" />
+
+        {/* Top center glow */}
+        <div style={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "240px",
+          height: "120px",
+          background: "radial-gradient(ellipse at top, rgba(212,167,86,0.07) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+
+        {/* Badge */}
+        <div style={{
+          position: "absolute",
+          top: "20px",
+          right: "38px",
+          background: "rgba(212,167,86,0.07)",
+          border: "1px solid rgba(212,167,86,0.18)",
+          borderRadius: "100px",
+          padding: "3px 12px",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "10px",
+          fontWeight: 500,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: "var(--ash)",
+        }}>
+          {method.badge}
+        </div>
+
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "28px" }}>
+          <div style={{
+            width: "48px",
+            height: "48px",
+            borderRadius: "3px",
+            background: "rgba(212,167,86,0.07)",
+            border: "1px solid rgba(212,167,86,0.18)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            color: "var(--sand)",
+          }}>
+            {method.icon}
+          </div>
+          <div>
+            <div style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "10px",
+              fontWeight: 500,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "var(--ash)",
+              marginBottom: "3px",
+            }}>
+              Donate via
+            </div>
+            <div style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "30px",
+              fontWeight: 600,
+              color: "var(--cream)",
+              lineHeight: 1,
+            }}>
+              {method.name}
+            </div>
+          </div>
+        </div>
+
+        {/* Gold divider */}
+        <div style={{
+          height: "1px",
+          background: "linear-gradient(90deg, rgba(212,167,86,0.3), rgba(212,167,86,0.05) 60%, transparent)",
+          marginBottom: "28px",
+        }} />
+
+        {/* Primary value */}
+        <div style={{ marginBottom: "16px" }}>
+          <div style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "10px",
+            fontWeight: 500,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "var(--ash)",
+            marginBottom: "10px",
+          }}>
+            {method.primaryLabel}
+          </div>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+            flexWrap: "wrap",
+          }}>
+            <span style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "34px",
+              fontWeight: 600,
+              color: "var(--sand)",
+              letterSpacing: "0.01em",
+              lineHeight: 1,
+            }}>
+              {method.primaryValue}
+            </span>
+            <CopyButton text={method.primaryValue} />
+          </div>
+        </div>
+
+        {/* Recipient / secondary info */}
+        <div style={{
+          background: "rgba(212,167,86,0.04)",
+          border: "1px solid rgba(212,167,86,0.09)",
+          borderRadius: "2px",
+          padding: "10px 16px",
+          marginBottom: "32px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "12px",
+        }}>
+          <span style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "11px",
+            fontWeight: 400,
+            color: "var(--ash)",
+          }}>
+            {method.secondaryLabel}
+          </span>
+          <span style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "13px",
+            fontWeight: 400,
+            color: "var(--smoke)",
+            letterSpacing: "0.02em",
+          }}>
+            {method.secondaryValue}
+          </span>
+        </div>
+
+        {/* Instructions */}
+        <div style={{ marginBottom: "28px" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            marginBottom: "16px",
+          }}>
+            <span style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "10px",
+              fontWeight: 500,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "var(--sand)",
+            }}>
+              Steps
+            </span>
+            <div style={{ flex: 1, height: "1px", background: "rgba(212,167,86,0.12)" }} />
+          </div>
+          <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
+            {method.instructions.map((step, j) => (
+              <li key={j} style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "14px",
+                marginBottom: j < method.instructions.length - 1 ? "11px" : 0,
+              }}>
+                <span style={{
+                  flexShrink: 0,
+                  width: "22px",
+                  height: "22px",
+                  border: "1px solid rgba(212,167,86,0.22)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                  color: "var(--sand)",
+                  marginTop: "1px",
+                }}>
+                  {j + 1}
+                </span>
+                <span style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "13px",
+                  fontWeight: 300,
+                  lineHeight: 1.55,
+                  color: "var(--smoke)",
+                }}>
+                  {step}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Gold divider */}
+        <div style={{
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(212,167,86,0.12), transparent)",
+          marginBottom: "20px",
+        }} />
+
+        {/* Action row */}
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
+          {/* QR toggle */}
+          <button
+            onClick={() => setShowQR(!showQR)}
+            style={{
+              background: showQR ? "rgba(212,167,86,0.1)" : "transparent",
+              border: "1px solid rgba(212,167,86,0.18)",
+              color: showQR ? "var(--sand)" : "var(--ash)",
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              padding: "10px 16px",
+              borderRadius: "2px",
+              cursor: "pointer",
+              transition: "all 0.25s",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "7px",
+            }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            {showQR ? "Hide QR" : "Show QR"}
+          </button>
+
+          {/* Cash App link or Zelle note */}
+          {method.link ? (
+            <a
+              href={method.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                flex: 1,
+                minWidth: "140px",
+                background: "rgba(212,167,86,0.07)",
+                border: "1px solid rgba(212,167,86,0.18)",
+                color: "var(--sand)",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "12px",
+                fontWeight: 500,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "10px 16px",
+                borderRadius: "2px",
+                textDecoration: "none",
+                transition: "all 0.25s",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "7px",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(212,167,86,0.14)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(212,167,86,0.07)";
+              }}
+            >
+              Open Cash App
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
+          ) : method.note ? (
+            <p style={{
+              flex: 1,
+              margin: 0,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "12px",
+              fontWeight: 300,
+              color: "var(--ash)",
+              lineHeight: 1.45,
+            }}>
+              {method.note}
+            </p>
+          ) : null}
+        </div>
+
+        {/* QR panel — collapsible */}
+        <div style={{
+          overflow: "hidden",
+          maxHeight: showQR ? "240px" : "0",
+          transition: "max-height 0.4s cubic-bezier(0.16,1,0.3,1)",
+        }}>
+          <div style={{
+            marginTop: "20px",
+            padding: "24px",
+            background: "rgba(212,167,86,0.04)",
+            border: "1px solid rgba(212,167,86,0.13)",
+            borderRadius: "3px",
+            display: "flex",
+            alignItems: "center",
+            gap: "24px",
+          }}>
+            <div style={{
+              padding: "10px",
+              background: "#F7F0E3",
+              borderRadius: "2px",
+              lineHeight: 0,
+              flexShrink: 0,
+            }}>
+              <QRCodeSVG
+                value={method.qrValue}
+                size={100}
+                bgColor="#F7F0E3"
+                fgColor="#0C0804"
+                level="H"
+                style={{ display: "block" }}
+              />
+            </div>
+            <div>
+              <div style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "15px",
+                fontWeight: 400,
+                fontStyle: "italic",
+                color: "var(--sand)",
+                marginBottom: "6px",
+              }}>
+                Scan with your camera
+              </div>
+              <div style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "12px",
+                fontWeight: 300,
+                color: "var(--ash)",
+                lineHeight: 1.5,
+              }}>
+                Point your phone&apos;s camera at the code to open {method.name} directly.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </RevealSection>
+  );
+}
 
 export default function DonateSection() {
   return (
@@ -168,16 +588,36 @@ export default function DonateSection() {
         opacity: 0.3,
       }} />
 
-      {/* Background glow */}
+      {/* Vertical flanking lines */}
       <div style={{
         position: "absolute",
-        top: "30%",
+        top: "8%",
+        left: "5%",
+        width: "1px",
+        height: "65%",
+        background: "linear-gradient(180deg, transparent, rgba(212,167,86,0.08), transparent)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute",
+        top: "8%",
+        right: "5%",
+        width: "1px",
+        height: "65%",
+        background: "linear-gradient(180deg, transparent, rgba(212,167,86,0.08), transparent)",
+        pointerEvents: "none",
+      }} />
+
+      {/* Radial background glow */}
+      <div style={{
+        position: "absolute",
+        top: "18%",
         left: "50%",
         transform: "translateX(-50%)",
-        width: "800px",
-        height: "400px",
+        width: "900px",
+        height: "500px",
         borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(212,167,86,0.04) 0%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(212,167,86,0.05) 0%, transparent 70%)",
         pointerEvents: "none",
       }} />
 
@@ -185,19 +625,38 @@ export default function DonateSection() {
         {/* Section header */}
         <RevealSection>
           <div style={{ marginBottom: "72px", textAlign: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "24px" }}>
-              <span style={{ width: "40px", height: "1px", background: "var(--sand)", display: "inline-block" }} />
+            {/* Ornamental eyebrow */}
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "12px",
+              marginBottom: "28px",
+            }}>
+              <span style={{
+                display: "inline-block",
+                width: "56px",
+                height: "1px",
+                background: "linear-gradient(90deg, transparent, rgba(212,167,86,0.5))",
+              }} />
+              <Diamond opacity={0.55} />
               <span style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "11px",
                 fontWeight: 500,
-                letterSpacing: "0.18em",
+                letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 color: "var(--sand)",
               }}>
                 How to Help
               </span>
-              <span style={{ width: "40px", height: "1px", background: "var(--sand)", display: "inline-block" }} />
+              <Diamond opacity={0.55} />
+              <span style={{
+                display: "inline-block",
+                width: "56px",
+                height: "1px",
+                background: "linear-gradient(270deg, transparent, rgba(212,167,86,0.5))",
+              }} />
             </div>
 
             <h2 style={{
@@ -220,7 +679,7 @@ export default function DonateSection() {
               fontWeight: 300,
               lineHeight: 1.65,
               color: "var(--smoke)",
-              maxWidth: "580px",
+              maxWidth: "540px",
               margin: "0 auto",
             }}>
               100% of donations go directly to humanitarian relief efforts in Sudan.
@@ -234,356 +693,58 @@ export default function DonateSection() {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(420px, 1fr))",
           gap: "24px",
-          marginBottom: "60px",
+          marginBottom: "56px",
         }}>
           {donationMethods.map((method, i) => (
-            <RevealSection key={method.id} delay={i * 120}>
-              <div
-                className="card-lift"
-                style={{
-                  background: "linear-gradient(145deg, rgba(20,14,8,0.95), rgba(14,9,4,0.98))",
-                  border: `1px solid ${method.accentBorder}`,
-                  borderRadius: "6px",
-                  padding: "44px",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                {/* Corner accent */}
-                <div style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "120px",
-                  height: "120px",
-                  background: `radial-gradient(circle at 0 0, ${method.accentBg}, transparent 70%)`,
-                  pointerEvents: "none",
-                }} />
-
-                {/* Badge */}
-                <div style={{
-                  position: "absolute",
-                  top: "20px",
-                  right: "20px",
-                  background: `rgba(${method.badgeColor === "#6D1ED4" ? "109,30,212" : "0,214,79"},0.12)`,
-                  border: `1px solid ${method.accentBorder}`,
-                  borderRadius: "100px",
-                  padding: "4px 12px",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "10px",
-                  fontWeight: 600,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: method.accentColor,
-                }}>
-                  {method.badge}
-                </div>
-
-                {/* Header */}
-                <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "36px" }}>
-                  <div style={{
-                    width: "52px",
-                    height: "52px",
-                    borderRadius: "12px",
-                    background: method.accentBg,
-                    border: `1px solid ${method.accentBorder}`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}>
-                    {method.logo}
-                  </div>
-                  <div>
-                    <div style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "11px",
-                      fontWeight: 500,
-                      letterSpacing: "0.15em",
-                      textTransform: "uppercase",
-                      color: "var(--ash)",
-                      marginBottom: "3px",
-                    }}>
-                      Donate via
-                    </div>
-                    <div style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "28px",
-                      fontWeight: 600,
-                      color: "var(--cream)",
-                      lineHeight: 1,
-                    }}>
-                      {method.name}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Primary info */}
-                <div style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  borderRadius: "4px",
-                  padding: "20px 24px",
-                  marginBottom: "16px",
-                }}>
-                  <div style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "10px",
-                    fontWeight: 500,
-                    letterSpacing: "0.14em",
-                    textTransform: "uppercase",
-                    color: "var(--ash)",
-                    marginBottom: "8px",
-                  }}>
-                    {method.primaryLabel}
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: "12px",
-                    flexWrap: "wrap",
-                  }}>
-                    <span style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "28px",
-                      fontWeight: 600,
-                      color: method.accentColor,
-                      letterSpacing: "0.01em",
-                    }}>
-                      {method.primaryValue}
-                    </span>
-                    <CopyButton text={method.primaryValue} />
-                  </div>
-                </div>
-
-                {/* Secondary info */}
-                <div style={{
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.05)",
-                  borderRadius: "4px",
-                  padding: "14px 24px",
-                  marginBottom: "32px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}>
-                  <span style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    color: "var(--ash)",
-                  }}>
-                    {method.secondaryLabel}
-                  </span>
-                  <span style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "13px",
-                    fontWeight: 500,
-                    color: "var(--smoke)",
-                  }}>
-                    {method.secondaryValue}
-                  </span>
-                </div>
-
-                {/* QR Code + Instructions side by side */}
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "130px 1fr",
-                  gap: "24px",
-                  alignItems: "start",
-                  marginBottom: "28px",
-                }}>
-                  {/* QR */}
-                  <div style={{ textAlign: "center" }}>
-                    <div style={{
-                      background: "white",
-                      padding: "10px",
-                      borderRadius: "6px",
-                      display: "inline-block",
-                      border: `2px solid ${method.accentBorder}`,
-                      boxShadow: `0 0 20px ${method.accentBg}`,
-                    }}>
-                      <QRCodeSVG
-                        value={method.qrValue}
-                        size={106}
-                        bgColor="white"
-                        fgColor="#0C0804"
-                        level="H"
-                        style={{ display: "block" }}
-                      />
-                    </div>
-                    <div style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "10px",
-                      fontWeight: 400,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "var(--ash)",
-                      marginTop: "8px",
-                    }}>
-                      Scan to send
-                    </div>
-                  </div>
-
-                  {/* Instructions */}
-                  <div>
-                    <div style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "11px",
-                      fontWeight: 500,
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                      color: "var(--sand)",
-                      marginBottom: "14px",
-                    }}>
-                      How to donate
-                    </div>
-                    <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                      {method.instructions.map((step, j) => (
-                        <li key={j} style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "12px",
-                          marginBottom: "10px",
-                        }}>
-                          <span style={{
-                            flexShrink: 0,
-                            width: "20px",
-                            height: "20px",
-                            borderRadius: "50%",
-                            background: method.accentBg,
-                            border: `1px solid ${method.accentBorder}`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily: "'DM Sans', sans-serif",
-                            fontSize: "10px",
-                            fontWeight: 600,
-                            color: method.accentColor,
-                          }}>
-                            {j + 1}
-                          </span>
-                          <span style={{
-                            fontFamily: "'DM Sans', sans-serif",
-                            fontSize: "13px",
-                            fontWeight: 300,
-                            lineHeight: 1.5,
-                            color: "var(--smoke)",
-                          }}>
-                            {step}
-                          </span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-
-                {/* Bottom CTA */}
-                {method.id === "cashapp" ? (
-                  <a
-                    href={method.qrValue}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      background: method.accentBg,
-                      border: `1px solid ${method.accentBorder}`,
-                      color: method.accentColor,
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      padding: "14px 24px",
-                      borderRadius: "3px",
-                      textDecoration: "none",
-                      transition: "all 0.25s",
-                      width: "100%",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = `rgba(0,214,79,0.18)`;
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = method.accentBg;
-                    }}
-                  >
-                    Open in Cash App
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15 3 21 3 21 9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                  </a>
-                ) : (
-                  <div style={{
-                    background: method.accentBg,
-                    border: `1px solid ${method.accentBorder}`,
-                    borderRadius: "3px",
-                    padding: "14px 24px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={method.accentColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"/>
-                      <line x1="12" y1="8" x2="12" y2="12"/>
-                      <line x1="12" y1="16" x2="12.01" y2="16"/>
-                    </svg>
-                    <span style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "12px",
-                      fontWeight: 400,
-                      color: "var(--smoke)",
-                      lineHeight: 1.4,
-                    }}>
-                      Available in most major US banking apps including Chase, Bank of America, Wells Fargo, and more.
-                    </span>
-                  </div>
-                )}
-              </div>
-            </RevealSection>
+            <DonationCard key={method.id} method={method} index={i} />
           ))}
         </div>
 
         {/* Trust statement */}
         <RevealSection delay={200}>
           <div style={{
-            background: "rgba(0,122,61,0.06)",
-            border: "1px solid rgba(0,122,61,0.2)",
-            borderRadius: "4px",
-            padding: "28px 36px",
+            position: "relative",
+            padding: "32px 40px",
             display: "flex",
-            alignItems: "center",
-            gap: "20px",
+            alignItems: "flex-start",
+            gap: "24px",
             flexWrap: "wrap",
           }}>
+            {/* Left gold accent bar */}
             <div style={{
-              width: "40px",
-              height: "40px",
+              position: "absolute",
+              left: 0,
+              top: "15%",
+              bottom: "15%",
+              width: "1px",
+              background: "linear-gradient(180deg, transparent, rgba(212,167,86,0.3), transparent)",
+            }} />
+
+            <div style={{
+              width: "38px",
+              height: "38px",
               flexShrink: 0,
-              borderRadius: "50%",
-              background: "rgba(0,122,61,0.15)",
+              border: "1px solid rgba(212,167,86,0.2)",
+              borderRadius: "2px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              color: "var(--sand)",
+              marginTop: "2px",
             }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sudan-green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <polyline points="9 12 11 14 15 10"/>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 12 11 14 15 10" />
               </svg>
             </div>
-            <div>
+            <div style={{ flex: 1, minWidth: "240px" }}>
               <div style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "13px",
-                fontWeight: 600,
-                color: "var(--sudan-green)",
-                marginBottom: "4px",
-                letterSpacing: "0.06em",
+                fontSize: "10px",
+                fontWeight: 500,
+                color: "var(--sand)",
+                marginBottom: "8px",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
               }}>
                 100% Transparent
@@ -593,7 +754,7 @@ export default function DonateSection() {
                 fontSize: "14px",
                 fontWeight: 300,
                 color: "var(--smoke)",
-                lineHeight: 1.5,
+                lineHeight: 1.65,
                 margin: 0,
               }}>
                 This campaign is organized by MIST 2026 Humanitarian Services.
