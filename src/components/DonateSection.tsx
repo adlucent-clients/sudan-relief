@@ -169,7 +169,7 @@ const donationMethods: DonationMethod[] = [
     badge: "Via App",
     qrImage: "/qr-cashapp.jpeg",
     primaryLabel: "Cashtag",
-    primaryValue: "$pfsulay1",
+    primaryValue: "$5pfsulay1",
     secondaryLabel: "Platform",
     secondaryValue: "Cash App",
     instructions: [
@@ -184,7 +184,7 @@ const donationMethods: DonationMethod[] = [
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
       </svg>
     ),
-    link: "https://cash.app/$pfsulay1",
+    link: "https://cash.app/$5pfsulay1",
   },
 ];
 
