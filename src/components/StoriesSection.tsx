@@ -78,7 +78,7 @@ export default function StoriesSection() {
       id="stories"
       style={{
         background: "linear-gradient(180deg, #0C0804 0%, #110905 50%, #0C0804 100%)",
-        padding: "120px 0",
+        padding: "clamp(80px, 10vw, 120px) 0",
         position: "relative",
         overflow: "hidden",
       }}
@@ -93,7 +93,7 @@ export default function StoriesSection() {
         opacity: 0.3,
       }} />
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 clamp(20px, 5vw, 32px)" }}>
         {/* Voices section */}
         <RevealSection>
           <div style={{ marginBottom: "80px" }}>

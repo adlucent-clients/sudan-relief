@@ -41,7 +41,7 @@ export default function NavBar() {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "0 32px",
+          padding: "0 clamp(20px, 5vw, 32px)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -60,6 +60,8 @@ export default function NavBar() {
             display: "flex",
             alignItems: "center",
             gap: "10px",
+            whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
         >
           <span
@@ -70,19 +72,23 @@ export default function NavBar() {
               borderRadius: "50%",
               background: "var(--sudan-green)",
               boxShadow: "0 0 8px rgba(0,122,61,0.8)",
+              flexShrink: 0,
             }}
           />
           <span>Sudan Relief</span>
           <span
             style={{
-              fontSize: "11px",
+              fontSize: "10px",
               fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 400,
+              fontWeight: 500,
               color: "var(--sand)",
-              letterSpacing: "0.12em",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
-              opacity: 0.8,
-              marginLeft: "2px",
+              opacity: 0.75,
+              background: "rgba(212,167,86,0.1)",
+              border: "1px solid rgba(212,167,86,0.2)",
+              borderRadius: "3px",
+              padding: "2px 7px",
             }}
           >
             MIST 2026

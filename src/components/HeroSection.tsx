@@ -173,6 +173,7 @@ export default function HeroSection() {
 
       {/* Content */}
       <div
+        className="hero-inner"
         style={{
           position: "relative",
           zIndex: 10,
@@ -296,7 +297,7 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div
-          className="fade-up d6"
+          className="fade-up d6 cta-row"
           style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "80px" }}
         >
           <a
@@ -367,10 +368,10 @@ export default function HeroSection() {
 
         {/* Stats row */}
         <div
-          className="fade-up d7"
+          className="fade-up d7 stats-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gridTemplateColumns: "repeat(4, 1fr)",
             gap: "1px",
             background: "rgba(212,167,86,0.1)",
             border: "1px solid rgba(212,167,86,0.1)",
@@ -421,6 +422,15 @@ export default function HeroSection() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 600px) {
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .hero-inner { padding: 100px 20px 60px !important; }
+          .cta-row { flex-direction: column !important; }
+          .cta-row a { width: 100% !important; justify-content: center !important; }
+        }
+      `}</style>
 
       {/* Scroll indicator */}
       <div
