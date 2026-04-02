@@ -337,7 +337,9 @@ export default function ResourcesSection() {
             </p>
 
             <a
-              href="#donate"
+              href="https://www.launchgood.com/v4/campaign/mist_carolina_cato_middle?src=1710041"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-glow"
               style={{
                 display: "inline-flex",

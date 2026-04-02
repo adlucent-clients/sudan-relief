@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Sudan Relief — MIST 2026 Humanitarian Services",
   description:
-    "The people of Sudan are facing one of the world's most devastating humanitarian crises. Join us in providing urgent relief. Donate today through Zelle or Cash App.",
+    "The people of Sudan are facing one of the world's most devastating humanitarian crises. Join us in providing urgent relief. Donate today through LaunchGood.",
   openGraph: {
     title: "Sudan Relief — MIST 2026 Humanitarian Services",
     description:

@@ -136,7 +136,9 @@ export default function NavBar() {
 
         {/* CTA */}
         <a
-          href="#donate"
+          href="https://www.launchgood.com/v4/campaign/mist_carolina_cato_middle?src=1710041"
+          target="_blank"
+          rel="noopener noreferrer"
           className="hidden-mobile btn-glow"
           style={{
             background: "var(--sand)",
@@ -240,7 +242,9 @@ export default function NavBar() {
             </a>
           ))}
           <a
-            href="#donate"
+            href="https://www.launchgood.com/v4/campaign/mist_carolina_cato_middle?src=1710041"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             style={{
               display: "block",
